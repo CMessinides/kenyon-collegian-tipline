@@ -1,18 +1,12 @@
 .form {
-  background-color: rgba(255, 255, 255, 1);
-  border-top: 8px #726aa9 solid;
-  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),
-              0 1px 10px 0 rgba(0,0,0,0.12),
-              0 2px 4px -1px rgba(0,0,0,0.3);
   line-height: 1.5;
   margin: 2rem auto;
   max-width: 560px;
+  padding: 0 1.25rem;
 }
 
-.form__intro,
-.form__body,
-.form__footer {
-  padding: 1.25rem;
+.form__intro {
+  padding-bottom: 1.25rem;
 }
 
 .form__intro em {
@@ -21,12 +15,12 @@
 
 .form__body {
   border-top: 1px #D7DAE2 solid;
-  border-bottom: 1px #D7DAE2 solid;
+  padding: 1.25rem 0;
 }
 
 .form__footer {
   display: flex;
-  justify-content: flex-end;
+  padding-top: 1.25rem;
 }
 
 .form__submit-btn {
@@ -40,8 +34,4 @@
   font-size: 0.875rem;
   font-weight: 600;
   padding: 0.5rem 1rem;
-}
-
-.form--embedded {
-  margin-top: 0;
 }
