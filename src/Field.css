@@ -1,0 +1,50 @@
+.field + .field {
+  margin-top: 1.25rem;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.field__help {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #6f7179;
+}
+
+.field--required .field__label::after {
+  content: "*";
+  color: #FF6F59;
+}
+
+.field__input {
+  display: block;
+  border: 1px #D7DAE2 solid;
+  border-radius: 4px;
+  font-family: inherit;
+  width: 100%;
+  padding: .5rem;
+  transition: 200ms border-color linear;
+}
+
+.field__input:focus {
+  border-color: #78ADFD;
+  outline: 0;
+}
+
+.field__input--email,
+.field__input--phone {
+  max-width: 250px;
+}
+
+.field__input--tip {
+  max-width: 500px;
+}
+
+.field__input--potential-interviews,
+.field__input--additional-sources {
+  max-width: 350px;
+}

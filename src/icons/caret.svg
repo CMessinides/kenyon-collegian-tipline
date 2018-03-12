@@ -1,0 +1,17 @@
+<svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>Frame</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(149 172)">
+<clipPath id="clip-0" clip-rule="evenodd">
+<path d="M -149 -172L -125 -172L -125 -148L -149 -148L -149 -172Z" fill="#FFFFFF"/>
+</clipPath>
+<g id="Frame" clip-path="url(#clip-0)">
+<g id="Caret">
+<use xlink:href="#path0_stroke" transform="translate(-146 -163)"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_stroke" d="M 0.5547 -0.83205C 0.0951715 -1.1384 -0.525698 -1.01423 -0.83205 -0.5547C -1.1384 -0.0951715 -1.01423 0.525698 -0.5547 0.83205L 0.5547 -0.83205ZM 9 6L 8.4453 6.83205C 8.7812 7.05598 9.2188 7.05598 9.5547 6.83205L 9 6ZM 18.5547 0.83205C 19.0142 0.525698 19.1384 -0.0951715 18.8321 -0.5547C 18.5257 -1.01423 17.9048 -1.1384 17.4453 -0.83205L 18.5547 0.83205ZM -0.5547 0.83205L 8.4453 6.83205L 9.5547 5.16795L 0.5547 -0.83205L -0.5547 0.83205ZM 9.5547 6.83205L 18.5547 0.83205L 17.4453 -0.83205L 8.4453 5.16795L 9.5547 6.83205Z"/>
+</defs>
+</svg>
