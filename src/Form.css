@@ -1,26 +1,6 @@
-.form {
-  line-height: 1.5;
-  margin: 2rem auto;
-  max-width: 560px;
-  padding: 0 1.25rem;
-}
-
-.form__intro {
-  padding-bottom: 1.25rem;
-}
-
-.form__intro em {
-  font-style: italic;
-}
-
-.form__body {
-  border-top: 1px #D7DAE2 solid;
-  padding: 1.25rem 0;
-}
-
 .form__footer {
   display: flex;
-  padding-top: 1.25rem;
+  padding-top: 2rem;
 }
 
 .form__submit-btn {
@@ -34,4 +14,15 @@
   font-size: 0.875rem;
   font-weight: 600;
   padding: 0.5rem 1rem;
+}
+
+.form__submit-btn:hover,
+.form__submit-btn:focus {
+  background-color: #613fa6;
+}
+
+.form__submit-btn:disabled {
+  color: #707279;
+  background-color:#D7DAE2;
+  cursor: not-allowed;
 }

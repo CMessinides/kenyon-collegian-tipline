@@ -32,8 +32,9 @@ const Header = ({ embedded }) => {
             <PopoutIcon
               className="header__icon header__icon--popout"
               aria-hidden="true"
-              size={20}
+              size={12}
             />
+            <span className="header__link-text">New window</span>
           </a>
         )}
       </div>

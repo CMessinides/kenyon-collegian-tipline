@@ -1,9 +1,55 @@
 .app {
-  background-color: rgba(240, 241, 245, 1);
+  background-color: #f0f1f5;
   min-height: 100%;
+  line-height: 1.5;
 }
 
-.app--embedded {
-  padding-top: 61px;
-  padding-top: calc(3.5rem + 5px);
+.app__body {
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 2rem 20px;
+}
+
+.app__intro {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px #D7DAE2 solid;
+  margin-bottom: 1.25rem;
+}
+
+.app__intro em {
+  font-style: italic;
+}
+
+.app__footer {
+  padding: 0.75rem 0;
+  font-size: 0.75rem;
+  background-color: #FFF;
+  border-top: 1px #D7DAE2 solid;
+}
+
+.app__nav {
+  max-width: 560px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+.app__nav-list {
+  display: flex;
+}
+
+.app__nav-item--primary {
+  margin-right: auto;
+}
+
+.app__nav-link {
+  color: inherit;
+}
+
+.app__nav-item + .app__nav-item {
+  padding-left: 8px;
+}
+
+/* Embedded styles */
+.is-embedded .app {
+  padding-top: 57px;
 }

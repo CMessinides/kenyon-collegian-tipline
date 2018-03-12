@@ -2,12 +2,11 @@
   background-color: #fff;
   border-top: 4px #726aa9 solid;
   border-bottom: 1px #D7DAE2 solid;
-  /* background-color: #4b2e84; */
   font-size: 0;
 }
 
 .header__container {
-  padding: 1rem 1.25rem;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   max-width: 560px;
@@ -16,34 +15,48 @@
 
 .header__link {
   color: inherit;
-  padding: 4px;
+  border-radius: 3px;
+  line-height: 1;
   margin: -4px 0;
+  padding: 4px;
+  text-decoration: none;
 }
 
 .header__link--home {
   margin-left: -4px;
-  margin-right: 8px;
+  margin-right: 4px;
 }
 
 .header__link--popout {
+  box-shadow: 0 0 0 1px #D7DAE2;
   margin-left: auto;
   margin-right: -4px;
 }
 
+.header__icon--popout,
+.header__link-text {
+  vertical-align: middle;
+}
+
+.header__link-text {
+  display: inline-block;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
 .header__logo {
   display: block;
-  height: 24px;
-  max-width: 100%;
-  width: auto;
+  height: 20px;
+  width: 20px;
 }
 
 .header__title {
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: 700;
 }
 
 /* Embedded styles */
-.app--embedded .header {
+.is-embedded .header {
   position: fixed;
   z-index: 2;
   top: 0;
