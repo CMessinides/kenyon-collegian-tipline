@@ -22,18 +22,16 @@ const canSubmit = (props, state) => {
 class Form extends Component {
   constructor(props, ...args) {
     super(props, ...args);
+    const fields = props.fields || {};
     this.state = {
-      fields: {}
+      fields: Object.assign(
+        {},
+        ...Object.keys(fields).map(name => {
+          const value = fields[name].value || "";
+          return { [name]: { value, error: null } };
+        })
+      )
     };
-
-    for (const name in props.fields) {
-      if (props.fields.hasOwnProperty(name)) {
-        this.state.fields[name] = {
-          error: null,
-          value: ""
-        };
-      }
-    }
   }
 
   onFieldChange = (event, validator) => {
