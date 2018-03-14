@@ -20,8 +20,8 @@ const canSubmit = (props, state) => {
 };
 
 class Form extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, ...args) {
+    super(props, ...args);
     this.state = {
       fields: {}
     };
@@ -68,7 +68,12 @@ class Form extends Component {
   render() {
     const fields = this.props.fields || {};
     return (
-      <form className="form">
+      <form
+        className="form"
+        data-netlify="true"
+        data-netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value={this.props.name} />
         {Object.keys(fields).map(name => (
           <Field
             {...fields[name]}

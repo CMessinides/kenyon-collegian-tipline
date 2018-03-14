@@ -29,7 +29,7 @@ class App extends Component {
             hear it. Please use the form below to submit your tip. Required
             items are marked with a red asterisk.
           </p>
-          <Form fields={this.props.fields} embedded={this.state.embedded} />
+          <Form name="tip" fields={this.props.fields} embedded={this.state.embedded} />
         </div>
         {this.state.embedded || (
           <footer className="app__footer">
