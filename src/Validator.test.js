@@ -39,7 +39,7 @@ describe("createValidatorFn()", () => {
 describe("Validator", () => {
   describe("validate()", () => {
     describe("given no functions", () => {
-      it('should always return null', () => {
+      it("should always return null", () => {
         const v = new Validator();
         const expected = null;
         const actual = v.validate("input");
@@ -84,7 +84,7 @@ describe("Validator", () => {
         expect(actual).toBe(expected);
       });
 
-      it('should short circuit after the first error', () => {
+      it("should short circuit after the first error", () => {
         v.validate(input);
 
         expect(mockFns[0]).toHaveBeenCalledWith("input");

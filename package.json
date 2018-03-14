@@ -4,10 +4,13 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-maskedinput": "^4.0.1",
     "react-scripts": "1.1.1",
+    "react-test-renderer": "^16.2.0",
     "validator": "^9.4.1"
   },
   "scripts": {

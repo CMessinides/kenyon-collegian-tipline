@@ -1,9 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { shallow } from "enzyme";
 import Field from "./Field";
 
 it("renders without crashing", () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<Field />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  shallow(<Field />);
 });
