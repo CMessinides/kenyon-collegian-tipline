@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Field from "./Field";
+import SubmitButton from "./SubmitButton";
 import "./Form.css";
 
 const collectValidationData = (props, state) => {
@@ -84,13 +85,7 @@ class Form extends Component {
           />
         ))}
         <div className="form__footer">
-          <button
-            className="form__submit-btn"
-            type="submit"
-            disabled={!canSubmit(this.props, this.state)}
-          >
-            Submit
-          </button>
+          <SubmitButton />
         </div>
       </form>
     );
