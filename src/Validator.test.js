@@ -1,10 +1,6 @@
 import Validator, { createValidatorFn } from "./Validator";
 
 describe("createValidatorFn()", () => {
-  it("should require a function", () => {
-    expect(createValidatorFn).toThrow(TypeError);
-  });
-
   it("should return a function", () => {
     const mockFn = jest.fn();
     const actual = createValidatorFn(mockFn);
@@ -42,6 +38,16 @@ describe("createValidatorFn()", () => {
 
 describe("Validator", () => {
   describe("validate()", () => {
+    describe("given no functions", () => {
+      it('should always return null', () => {
+        const v = new Validator();
+        const expected = null;
+        const actual = v.validate("input");
+
+        expect(actual).toBe(expected);
+      });
+    });
+
     describe("given valid input", () => {
       const mockFns = [jest.fn(), jest.fn()];
       mockFns.forEach(fn => fn.mockReturnValue(null));

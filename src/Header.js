@@ -11,6 +11,7 @@ const Header = ({ embedded }) => {
         <a
           href="https://kenyoncollegian.com"
           title="Go to the Kenyon Collegian"
+          target={embedded ? "_blank" : undefined }
           className="header__link header__link--home"
           aria-label="Go to the Kenyon Collegian"
         >

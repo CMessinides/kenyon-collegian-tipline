@@ -2,9 +2,20 @@
   margin-top: 1.25rem;
 }
 
-.field__label {
+.field--email,
+.field--phone {
+  max-width: 250px;
+}
+
+.field--tip,
+.field--potential-interviews,
+.field--additional-sources {
+  max-width: 400px;
+}
+
+.field__label,
+.field__error {
   display: block;
-  margin-bottom: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
 }
@@ -16,7 +27,7 @@
 
 .field--required .field__label::after {
   content: "*";
-  color: #FF6F59;
+  color: #D42121;
 }
 
 .field__input {
@@ -28,7 +39,16 @@
   line-height: 1;
   width: 100%;
   padding: 8px;
+  margin-top: 0.5rem;
   transition: 200ms border-color linear;
+}
+
+.field--textarea .field__input {
+  line-height: 1.5;
+}
+
+.field--error .field__input {
+  border-color: #D42121;
 }
 
 .field__input:focus {
@@ -36,18 +56,7 @@
   outline: 0;
 }
 
-.field__input--email,
-.field__input--phone {
-  max-width: 250px;
-}
-
-.field__input--tip,
-.field__input--potential-interviews,
-.field__input--additional-sources {
-  max-width: 400px;
-}
-
-.field__input--tip {
-  min-height: 5.5rem;
-  line-height: inherit;
+.field__error {
+  margin-top: 0.25rem;
+  color: #D42121;
 }

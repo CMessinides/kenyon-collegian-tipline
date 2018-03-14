@@ -10,15 +10,6 @@
  * @returns {ValidatorFunction} The resulting validator function
  */
 export function createValidatorFn(isValid, errorMsg = "Input is invalid") {
-  // If isValid is not a function, throw an error
-  try {
-    isValid();
-  } catch (e) {
-    if (e instanceof TypeError)
-      throw TypeError(`Invalid argument: ${isValid} is not a function.`);
-    throw e;
-  }
-
   return input => (isValid(input) ? null : Error(errorMsg));
 }
 
