@@ -10,10 +10,13 @@ const createMockValidator = (fn = str => null) => {
 };
 
 const assertInputsNotCleared = wrapper => {
-  wrapper.update();
   expect(wrapper.find("input").someWhere(i => i.props().value.length > 0)).toBe(
     true
   );
+};
+
+const assertSubmitDisabled = wrapper => {
+  expect(wrapper.find("[type='submit']").prop("disabled")).toBe(true);
 };
 
 const optionalField = {
@@ -109,6 +112,7 @@ describe("on submit", () => {
 
       // Submit the form without required data
       await form.handleSubmit();
+      wrapper.update();
     });
 
     afterAll(() => {
@@ -122,6 +126,10 @@ describe("on submit", () => {
 
     it("should not clear the inputs", () => {
       assertInputsNotCleared(wrapper);
+    });
+
+    it("should disable the submit button", () => {
+      assertSubmitDisabled(wrapper);
     });
   });
 
@@ -142,6 +150,7 @@ describe("on submit", () => {
 
       // Submit the form with invalid data
       await form.handleSubmit();
+      wrapper.update();
     });
 
     afterAll(() => {
@@ -155,6 +164,10 @@ describe("on submit", () => {
 
     it("should not clear the inputs", () => {
       assertInputsNotCleared(wrapper);
+    });
+
+    it("should disable the submit button", () => {
+      assertSubmitDisabled(wrapper);
     });
   });
 
@@ -178,6 +191,7 @@ describe("on submit", () => {
       );
       // Submit the form
       await form.handleSubmit();
+      wrapper.update();
     });
 
     afterAll(() => {
