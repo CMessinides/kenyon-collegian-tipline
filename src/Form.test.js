@@ -27,17 +27,17 @@ it("should render without crashing", () => {
 });
 
 describe("on submit", () => {
-  const _fetch = global.fetch;
+  const _fetch = fetch;
 
-  afterEach(() => {
-    global.fetch = _fetch;
+  afterAll(() => {
+    fetch = _fetch;
   });
 
-  it("should send valid form data", async () => {
+  it("should send data", async () => {
     expect.assertions(1);
 
     // Mock fetch
-    global.fetch = jest.fn().mockImplementation((url, opts) => {
+    fetch = jest.fn().mockImplementation((url, opts) => {
       return new Promise((resolve, reject) => {
         resolve({ ok: true });
       });
@@ -59,7 +59,7 @@ describe("on submit", () => {
     await form.handleSubmit();
 
     // Assert
-    expect(global.fetch).toHaveBeenCalledWith("/", {
+    expect(fetch).toHaveBeenCalledWith("/", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -75,7 +75,7 @@ describe("on submit", () => {
     expect.assertions(1);
 
     // Mock fetch
-    global.fetch = jest.fn();
+    fetch = jest.fn();
 
     // Create and submit form
     const wrapper = mount(<Form fields={{ requiredField }} />);
@@ -85,7 +85,7 @@ describe("on submit", () => {
     await form.handleSubmit();
 
     // Assert
-    expect(global.fetch).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
 
     // Clean up
     wrapper.unmount();
@@ -95,7 +95,7 @@ describe("on submit", () => {
     expect.assertions(1);
 
     // Mock fetch
-    global.fetch = jest.fn();
+    fetch = jest.fn();
 
     // Create and submit form
     const wrapper = mount(<Form fields={{ invalidField }} />);
@@ -111,7 +111,7 @@ describe("on submit", () => {
     await form.handleSubmit();
 
     // Assert
-    expect(global.fetch).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
 
     // Clean up
     wrapper.unmount();
