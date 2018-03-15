@@ -11,6 +11,15 @@ const encodeForm = fields =>
     )
     .join("&");
 
+const getInitialFieldsState = fields =>
+  Object.assign(
+    {},
+    ...Object.keys(fields).map(name => {
+      const value = fields[name].value || "";
+      return { [name]: { value, error: null } };
+    })
+  );
+
 class Form extends Component {
   static defaultProps = {
     fields: {},
@@ -22,13 +31,7 @@ class Form extends Component {
     super(props, ...args);
 
     this.state = {
-      fields: Object.assign(
-        {},
-        ...Object.keys(this.props.fields).map(name => {
-          const value = this.props.fields[name].value || "";
-          return { [name]: { value, error: null } };
-        })
-      )
+      fields: getInitialFieldsState(props.fields)
     };
   }
 
@@ -74,8 +77,7 @@ class Form extends Component {
     });
     return fields.every(
       field =>
-        field.error === null &&
-        (field.required ? field.value.trim().length > 0 : true)
+        !field.error && (field.required ? field.value.trim().length > 0 : true)
     );
   };
 
@@ -99,7 +101,16 @@ class Form extends Component {
       };
 
       fetch(this.props.action, config).then(resp => {
-        resolve();
+        if (!resp.ok) {
+          resolve();
+          return;
+        }
+        this.setState(
+          {
+            fields: getInitialFieldsState(this.props.fields)
+          },
+          resolve
+        );
       });
     });
 
@@ -111,7 +122,6 @@ class Form extends Component {
         data-netlify-honeypot="bot-field"
         onSubmit={this.handleSubmit}
       >
-        <input type="hidden" name="form-name" value={this.props.name} />
         {Object.keys(this.props.fields).map(name => (
           <Field
             {...this.props.fields[name]}
