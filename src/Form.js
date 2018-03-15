@@ -3,50 +3,51 @@ import Field from "./Field";
 import SubmitButton from "./SubmitButton";
 import "./Form.css";
 
-const collectValidationData = (props, state) => {
-  const fields = { ...state.fields };
-  for (const name in props.fields) {
-    if (props.fields.hasOwnProperty(name)) {
-      fields[name].required = props.fields[name].required;
-    }
-  }
-  return Object.values(fields);
-};
-
-const canSubmit = (props, state) => {
-  return collectValidationData(props, state).every(
-    field =>
-      field.error === null && (field.required ? field.value.length > 0 : true)
-  );
-};
+const encodeForm = fields =>
+  Object.keys(fields)
+    .map(
+      name =>
+        encodeURIComponent(name) + "=" + encodeURIComponent(fields[name].value)
+    )
+    .join("&");
 
 class Form extends Component {
+  static defaultProps = {
+    fields: {},
+    action: "/",
+    name: ""
+  };
+
   constructor(props, ...args) {
     super(props, ...args);
-    const fields = props.fields || {};
+
     this.state = {
       fields: Object.assign(
         {},
-        ...Object.keys(fields).map(name => {
-          const value = fields[name].value || "";
+        ...Object.keys(this.props.fields).map(name => {
+          const value = this.props.fields[name].value || "";
           return { [name]: { value, error: null } };
         })
       )
     };
   }
 
-  onFieldChange = (event, validator) => {
-    const value = event.target.value;
-    const error = validator.validate(value);
-    this.setState({
-      fields: {
-        ...this.state.fields,
-        [event.target.name]: { error, value }
-      }
+  handleFieldChange = (event, validator) =>
+    new Promise((resolve, reject) => {
+      const value = event.target.value;
+      const error = validator.validate(value);
+      this.setState(
+        {
+          fields: {
+            ...this.state.fields,
+            [event.target.name]: { error, value }
+          }
+        },
+        resolve
+      );
     });
-  };
 
-  onFieldBlur = (event, validator) => {
+  handleFieldBlur = (event, validator) => {
     const name = event.target.name;
     const field = this.state.fields[name];
     const error = validator.validate(event.target.value);
@@ -64,24 +65,62 @@ class Form extends Component {
     }
   };
 
+  canSubmit = () => {
+    const fields = Object.keys(this.state.fields).map(name => {
+      return {
+        ...this.state.fields[name],
+        required: this.props.fields[name].required
+      };
+    });
+    return fields.every(
+      field =>
+        field.error === null &&
+        (field.required ? field.value.trim().length > 0 : true)
+    );
+  };
+
+  handleSubmit = event =>
+    new Promise((resolve, reject) => {
+      // Bail early if data is invalid
+      if (!this.canSubmit()) {
+        resolve();
+        return;
+      }
+
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: encodeForm({
+          "form-name": { value: this.props.name },
+          ...this.state.fields
+        })
+      };
+
+      fetch(this.props.action, config).then(resp => {
+        resolve();
+      });
+    });
+
   render() {
-    const fields = this.props.fields || {};
     return (
       <form
         className="form"
         data-netlify="true"
         data-netlify-honeypot="bot-field"
+        onSubmit={this.handleSubmit}
       >
         <input type="hidden" name="form-name" value={this.props.name} />
-        {Object.keys(fields).map(name => (
+        {Object.keys(this.props.fields).map(name => (
           <Field
-            {...fields[name]}
+            {...this.props.fields[name]}
             error={this.state.fields[name].error}
             value={this.state.fields[name].value}
             name={name}
             key={name}
-            onChange={this.onFieldChange}
-            onBlur={this.onFieldBlur}
+            onChange={this.handleFieldChange}
+            onBlur={this.handleFieldBlur}
           />
         ))}
         <div className="form__footer">
