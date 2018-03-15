@@ -1,15 +1,8 @@
-import React from 'react';
+import React from "react";
 
-const SubmitButton = ({
-  onSubmit
-}) => {
+const SubmitButton = ({ disabled }) => {
   return (
-    <button
-      className="form__submit-btn"
-      type="submit"
-      disabled
-      onSubmit={onSubmit}
-    >
+    <button className="form__submit-btn" type="submit" disabled={disabled}>
       Submit
     </button>
   );
