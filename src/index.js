@@ -7,8 +7,6 @@ import { blacklist, isEmail, isMobilePhone } from "validator";
 import Validator, { createValidatorFn } from "./Validator";
 import registerServiceWorker from "./registerServiceWorker";
 
-const isNotEmpty = input => input.trim().length > 0;
-
 const fields = {
   email: {
     label: "Email address",
@@ -16,7 +14,6 @@ const fields = {
     required: true,
     type: "email",
     validator: new Validator([
-      createValidatorFn(isNotEmpty, "Email address is required."),
       createValidatorFn(isEmail, "Email address is invalid.")
     ])
   },
@@ -25,10 +22,7 @@ const fields = {
     type: "tel",
     validator: new Validator([
       createValidatorFn(
-        input =>
-          isNotEmpty(input)
-            ? isMobilePhone(blacklist(input, "\\s\\(\\)\\-"), "en-US")
-            : true,
+        input => isMobilePhone(blacklist(input, "\\s\\(\\)\\-"), "en-US"),
         "Phone number is invalid."
       )
     ]),
@@ -38,10 +32,7 @@ const fields = {
     label: "Tip description",
     helpText: "Please briefly describe your tip. What makes it newsworthy?",
     required: true,
-    type: "textarea",
-    validator: new Validator([
-      createValidatorFn(isNotEmpty, "Tip description is required.")
-    ])
+    type: "textarea"
   },
   "potential-interviews": {
     label: "Potential interviews",

@@ -64,9 +64,7 @@ const createForm = (manualProps = {}) => {
 };
 
 const changeField = async (form, name, value) => {
-  const event = { target: { name, value } };
-  const validator = form.props.fields[name].validator;
-  await form.handleFieldChange(event, validator);
+  await form.updateField({ target: { name, value } });
 };
 
 describe("with empty required fields", () => {

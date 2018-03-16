@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Field from "./Field";
 import SubmitButton from "./SubmitButton";
-import "./Form.css";
 import TransportService from "./TransportService";
-import Validator from "./Validator";
+
+import "./Form.css";
 
 const encodeForm = fields =>
   Object.keys(fields)
@@ -64,10 +64,22 @@ class Form extends Component {
     };
   }
 
-  handleFieldChange = (event, validator = new Validator()) =>
-    new Promise((resolve, reject) => {
+  updateField = event =>
+    new Promise(resolve => {
+      const field = this.props.fields[event.target.name];
       const value = event.target.value;
-      const error = validator.validate(value);
+      let error = null;
+
+      if (value.trim().length === 0) {
+        if (field.required) {
+          error = Error(`${field.label} is required.`);
+        }
+      } else {
+        if (field.validator) {
+          error = field.validator.validate(value);
+        }
+      }
+
       this.setState(
         {
           fields: {
@@ -79,35 +91,18 @@ class Form extends Component {
       );
     });
 
-  handleFieldBlur = (event, validator) => {
-    const name = event.target.name;
-    const field = this.state.fields[name];
-    const error = validator.validate(event.target.value);
-
-    if (error !== field.error) {
-      this.setState({
-        fields: {
-          ...this.state.fields,
-          [name]: {
-            ...field,
-            error
-          }
-        }
-      });
-    }
-  };
-
   canSubmit = () => {
-    const fields = Object.keys(this.state.fields).map(name => {
-      return {
-        ...this.state.fields[name],
-        required: this.props.fields[name].required
-      };
-    });
-    return fields.every(
-      field =>
-        !field.error && (field.required ? field.value.trim().length > 0 : true)
-    );
+    const fields = Object.keys(this.state.fields).map(name => ({
+      ...this.state.fields[name],
+      required: this.props.fields[name].required
+    }));
+
+    if (fields.some(f => f.error)) return false;
+    if (fields.some(f => f.required && f.value.trim().length === 0)) {
+      return false;
+    }
+
+    return true;
   };
 
   handleSubmit = event =>
@@ -158,8 +153,8 @@ class Form extends Component {
             value={this.state.fields[name].value}
             name={name}
             key={name}
-            onChange={this.handleFieldChange}
-            onBlur={this.handleFieldBlur}
+            onChange={this.updateField}
+            onBlur={this.updateField}
           />
         ))}
         <div className="form__footer">

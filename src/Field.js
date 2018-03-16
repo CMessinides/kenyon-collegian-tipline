@@ -1,12 +1,9 @@
 import React from "react";
 import classnames from "classnames";
-import Validator from "./Validator";
 import MaskedInput from "react-maskedinput";
 import { AlertIcon } from "./Icon";
 
 import "./Field.css";
-
-const wrapEventHandler = (fn, validator) => event => fn(event, validator);
 
 const FieldInput = props => {
   // Delegate to MaskedInput if a mask pattern is provided
@@ -28,7 +25,6 @@ const Field = ({
   error,
   onChange,
   onBlur,
-  validator = new Validator(),
   type = "text",
   required = false,
   value = "",
@@ -47,8 +43,8 @@ const Field = ({
     type,
     required,
     value,
-    onChange: wrapEventHandler(onChange, validator),
-    onBlur: wrapEventHandler(onBlur, validator),
+    onChange,
+    onBlur,
     ...passToInput
   };
 
