@@ -1,7 +1,8 @@
 import React from "react";
 import classnames from "classnames";
 import Validator from "./Validator";
-import MaskedInput from 'react-maskedinput';
+import MaskedInput from "react-maskedinput";
+import { AlertIcon } from "./Icon";
 
 import "./Field.css";
 
@@ -10,21 +11,13 @@ const wrapEventHandler = (fn, validator) => event => fn(event, validator);
 const FieldInput = props => {
   // Delegate to MaskedInput if a mask pattern is provided
   if (props.mask) {
-    return <MaskedInput {...props} className="field__input" />
+    return <MaskedInput {...props} className="field__input" />;
   }
 
   return props.type === "textarea" ? (
-    <textarea
-      cols="80"
-      rows="4"
-      {...props}
-      className="field__input"
-    />
+    <textarea cols="80" rows="4" {...props} className="field__input" />
   ) : (
-    <input
-      {...props}
-      className="field__input"
-    />
+    <input {...props} className="field__input" />
   );
 };
 
@@ -65,8 +58,17 @@ const Field = ({
         {label}
       </label>
       {helpText && <p className="field__help">{helpText}</p>}
-      <FieldInput {...inputProps} />
-      {error && <p className="field__error">{error.message}</p>}
+      <div className="field__input-wrapper">
+        <FieldInput {...inputProps} />
+        {error && (
+          <AlertIcon
+            className="field__error-icon"
+            aria-hidden="true"
+            size={20}
+          />
+        )}
+      </div>
+      {error && <p className="field__error-message">{error.message}</p>}
     </div>
   );
 };

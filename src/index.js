@@ -16,12 +16,12 @@ const fields = {
     required: true,
     type: "email",
     validator: new Validator([
-      createValidatorFn(isNotEmpty, "Please enter a valid email address."),
-      createValidatorFn(isEmail, "Please enter a valid email address.")
+      createValidatorFn(isNotEmpty, "Email address is required."),
+      createValidatorFn(isEmail, "Email address is invalid.")
     ])
   },
   phone: {
-    label: "Phone Number",
+    label: "Phone number (optional)",
     type: "tel",
     validator: new Validator([
       createValidatorFn(
@@ -29,27 +29,27 @@ const fields = {
           isNotEmpty(input)
             ? isMobilePhone(blacklist(input, "\\s\\(\\)\\-"), "en-US")
             : true,
-        "Please enter a valid phone number."
+        "Phone number is invalid."
       )
     ]),
     mask: "(111) 111-1111"
   },
   tip: {
-    label: "Tip Information",
+    label: "Tip description",
     helpText: "Please briefly describe your tip. What makes it newsworthy?",
     required: true,
     type: "textarea",
     validator: new Validator([
-      createValidatorFn(isNotEmpty, "Please provide a description of your tip.")
+      createValidatorFn(isNotEmpty, "Tip description is required.")
     ])
   },
   "potential-interviews": {
-    label: "Potential Interviews",
+    label: "Potential interviews (optional)",
     helpText:
       "Please list the names of anyone you think we should interview for this story."
   },
   "additional-sources": {
-    label: "Additional Sources",
+    label: "Additional sources (optional)",
     helpText:
       "Please describe any other sources that might help us gather information on this story."
   }
