@@ -3,13 +3,14 @@
   border-top: 4px #726aa9 solid;
   border-bottom: 1px #D7DAE2 solid;
   font-size: 0;
+  flex: 0 auto;
 }
 
 .header__container {
   padding: 16px 20px;
   display: flex;
   align-items: center;
-  max-width: 560px;
+  max-width: 480px;
   margin: 0 auto;
 }
 

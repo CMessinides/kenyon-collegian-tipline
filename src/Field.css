@@ -2,17 +2,6 @@
   margin-top: 1.25rem;
 }
 
-.field--email,
-.field--phone {
-  max-width: 250px;
-}
-
-.field--tip,
-.field--potential-interviews,
-.field--additional-sources {
-  max-width: 400px;
-}
-
 .field__label,
 .field__error {
   display: block;

@@ -2,12 +2,16 @@
   background-color: #f0f1f5;
   min-height: 100%;
   line-height: 1.5;
+  display: flex;
+  flex-direction: column;
 }
 
 .app__body {
   margin: 0 auto;
-  max-width: 560px;
+  max-width: 480px;
   padding: 2rem 20px;
+  flex: 1 auto;
+  align-self: center;
 }
 
 .app__intro {
@@ -25,10 +29,11 @@
   font-size: 0.75rem;
   background-color: #FFF;
   border-top: 1px #D7DAE2 solid;
+  flex: 0 auto;
 }
 
 .app__nav {
-  max-width: 560px;
+  max-width: 480px;
   padding: 0 20px;
   margin: 0 auto;
 }
