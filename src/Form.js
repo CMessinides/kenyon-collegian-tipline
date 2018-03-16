@@ -48,16 +48,14 @@ class Form extends Component {
     fields: {},
     action: "/",
     name: "",
-    transportService: new TransportService(fetch)
+    transportService: new TransportService()
   };
 
   constructor(args) {
     super(args);
 
     // Proxy this.fetch() to the transport service
-    this.fetch = this.props.transportService.fetch.bind(
-      this.props.transportService
-    );
+    this.fetch = this.props.transportService.fetch;
 
     this.state = {
       fields: getInitialFieldsState(this.props.fields)
@@ -110,8 +108,7 @@ class Form extends Component {
       if (event) event.preventDefault();
       // Bail early if data is invalid
       if (!this.canSubmit()) {
-        resolve();
-        return;
+        return resolve();
       }
 
       const config = {

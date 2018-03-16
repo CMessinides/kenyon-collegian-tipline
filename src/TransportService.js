@@ -1,5 +1,5 @@
 class TransportService {
-  constructor(fetchFn = fetch.bind(global ? global : window)) {
+  constructor(fetchFn = fetch.bind(window ? window : global)) {
     this.fetchFn = fetchFn;
   }
 
