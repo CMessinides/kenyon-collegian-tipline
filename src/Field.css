@@ -2,11 +2,18 @@
   margin-top: 1.25rem;
 }
 
+.field__label {
+  font-weight: 500;
+  display: block;
+}
+
 .field__label,
 .field__error-message {
-  display: block;
   font-size: 0.875rem;
-  font-weight: 500;
+}
+
+.field__optional-note {
+  font-weight: 400;
 }
 
 .field__help {

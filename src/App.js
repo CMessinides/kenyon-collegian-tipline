@@ -16,8 +16,7 @@ const App = ({
     <div className="app__body">
       <p className="app__intro">
         Do you have a story for the <em>Kenyon Collegian</em>? We want to hear
-        it. Please use the form below to submit your tip. Required items are
-        marked with a red asterisk.
+        it. Please use the form below to submit your tip.
       </p>
       <Form
         name={formName}

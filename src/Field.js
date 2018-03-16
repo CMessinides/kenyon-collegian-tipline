@@ -55,7 +55,8 @@ const Field = ({
   return (
     <div className={className}>
       <label className="field__label" htmlFor={id}>
-        {label}
+        {label}{" "}
+        {required || <span className="field__optional-note">(optional)</span>}
       </label>
       {helpText && <p className="field__help">{helpText}</p>}
       <div className="field__input-wrapper">

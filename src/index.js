@@ -11,7 +11,7 @@ const isNotEmpty = input => input.trim().length > 0;
 
 const fields = {
   email: {
-    label: "Email Address",
+    label: "Email address",
     helpText: "We may email you about your tip.",
     required: true,
     type: "email",
@@ -21,7 +21,7 @@ const fields = {
     ])
   },
   phone: {
-    label: "Phone number (optional)",
+    label: "Phone number",
     type: "tel",
     validator: new Validator([
       createValidatorFn(
@@ -44,12 +44,12 @@ const fields = {
     ])
   },
   "potential-interviews": {
-    label: "Potential interviews (optional)",
+    label: "Potential interviews",
     helpText:
       "Please list the names of anyone you think we should interview for this story."
   },
   "additional-sources": {
-    label: "Additional sources (optional)",
+    label: "Additional sources",
     helpText:
       "Please describe any other sources that might help us gather information on this story."
   }
