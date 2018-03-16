@@ -112,6 +112,7 @@ class Form extends Component {
 
   handleSubmit = event =>
     new Promise((resolve, reject) => {
+      if (event) event.preventDefault();
       // Bail early if data is invalid
       if (!this.canSubmit()) {
         resolve();
