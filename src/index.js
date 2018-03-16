@@ -59,7 +59,12 @@ const embedded = window.parent !== window.top;
 if (embedded) document.querySelector("html").classList.add("is-embedded");
 
 ReactDOM.render(
-  <App formName="tip" fields={fields} fetchFn={fetch} embedded={embedded} />,
+  <App
+    formName="tip"
+    fields={fields}
+    fetchFn={fetch.bind(window)}
+    embedded={embedded}
+  />,
   document.getElementById("root")
 );
 registerServiceWorker();
