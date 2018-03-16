@@ -2,13 +2,20 @@ import React from "react";
 import { mount, shallow } from "enzyme";
 import Form from "./Form";
 
-// Helpers
-const createMockValidator = (fn = str => null) => {
+// Mock helpers
+const mockValidator = (fn = str => null) => {
   const v = {};
   v.validate = fn;
   return v;
 };
 
+const mockTransportService = fn => {
+  const ts = {};
+  ts.fetch = fn;
+  return ts;
+};
+
+// Assertion helpers
 const assertInputsNotCleared = wrapper => {
   expect(wrapper.find("input").someWhere(i => i.props().value.length > 0)).toBe(
     true
@@ -19,188 +26,241 @@ const assertSubmitDisabled = wrapper => {
   expect(wrapper.find("[type='submit']").prop("disabled")).toBe(true);
 };
 
+// TransportService.fetch() mocks
+const mockFetchOK = (url, config) =>
+  new Promise(resolve =>
+    resolve({
+      ok: true
+    })
+  );
+const mockFetchErr = (url, config) =>
+  new Promise((resolve, reject) => reject(Error()));
+
+// Field mocks
 const optionalField = {
   label: "Optional"
 };
-
 const requiredField = {
   label: "Required",
   required: true
 };
-
 const invalidField = {
   label: "Invalid",
-  validator: createMockValidator(string => Error())
+  validator: mockValidator(string => Error())
 };
 
-it("should render without crashing", () => {
-  shallow(<Form />);
-});
+const createForm = (manualProps = {}) => {
+  const props = {
+    name: "tip",
+    fields: {},
+    transportService: mockTransportService(mockFetchOK),
+    ...manualProps
+  };
 
-describe("on submit", () => {
-  // Save fetch()
-  const _fetch = fetch;
+  const wrapper = mount(<Form {...props} />);
+  const form = wrapper.instance();
 
-  // Restore fetch()
-  afterAll(() => {
-    fetch = _fetch;
+  return { wrapper, form };
+};
+
+const changeField = async (form, name, value) => {
+  const event = { target: { name, value } };
+  const validator = form.props.fields[name].validator;
+  await form.handleFieldChange(event, validator);
+};
+
+describe("with empty required fields", () => {
+  const mockFetch = jest.fn();
+  let wrapper;
+  let form;
+
+  beforeEach(async () => {
+    // Create the form
+    const f = createForm({
+      fields: { requiredField, optionalField },
+      transportService: mockTransportService(mockFetch)
+    });
+    wrapper = f.wrapper;
+    form = f.form;
+
+    // Put the form into an incomplete state
+    await changeField(form, "optionalField", "optional");
   });
 
-  describe("given valid data", () => {
-    // Create the form
-    const wrapper = mount(
-      <Form name="tip" fields={{ requiredField, optionalField }} />
-    );
-    const form = wrapper.instance();
+  afterEach(() => {
+    wrapper.unmount();
+  });
 
-    beforeAll(async () => {
-      // Mock fetch()
-      fetch = jest.fn().mockImplementation((url, opts) => {
-        return new Promise((resolve, reject) => {
-          resolve({ ok: true });
+  it("disables the submit button", () => {
+    wrapper.update();
+    assertSubmitDisabled(wrapper);
+  });
+
+  describe("on submit", () => {
+    it("does not send the data", async () => {
+      expect.assertions(1);
+
+      await form.handleSubmit();
+      wrapper.update();
+
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+
+    it("does not clear the inputs", async () => {
+      expect.assertions(1);
+
+      await form.handleSubmit();
+      wrapper.update();
+
+      assertInputsNotCleared(wrapper);
+    });
+  });
+});
+
+describe("with field validation errors", () => {
+  const mockFetch = jest.fn();
+  let wrapper;
+  let form;
+
+  beforeEach(async () => {
+    // Create the form
+    const f = createForm({
+      fields: { invalidField },
+      transportService: mockTransportService(mockFetch)
+    });
+    wrapper = f.wrapper;
+    form = f.form;
+
+    // Put the form into an invalid state
+    await changeField(form, "invalidField", "invalid");
+  });
+
+  afterEach(() => {
+    wrapper.unmount();
+  });
+
+  it("disables the submit button", () => {
+    wrapper.update();
+    assertSubmitDisabled(wrapper);
+  });
+
+  describe("on submit", () => {
+    it("does not send the data", async () => {
+      expect.assertions(1);
+
+      await form.handleSubmit();
+      wrapper.update();
+
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+
+    it("does not clear the inputs", async () => {
+      expect.assertions(1);
+
+      await form.handleSubmit();
+      wrapper.update();
+
+      assertInputsNotCleared(wrapper);
+    });
+  });
+});
+
+describe("with valid fields", () => {
+  let wrapper;
+  let form;
+
+  beforeEach(async () => {
+    // Create the form
+    const f = createForm({
+      action: "/",
+      name: "valid",
+      fields: { requiredField, optionalField }
+    });
+    wrapper = f.wrapper;
+    form = f.form;
+
+    // Put the form into a valid state
+    await changeField(form, "requiredField", "text");
+    await changeField(form, "optionalField", "more text");
+  });
+
+  afterEach(() => {
+    wrapper.unmount();
+  });
+
+  it("enables the submit button", () => {
+    wrapper.update();
+    expect(wrapper.find("[type='submit']").prop("disabled")).toBe(false);
+  });
+
+  describe("on submit", () => {
+    describe("on success", () => {
+      const mockFetch = jest.fn().mockImplementation(mockFetchOK);
+
+      beforeEach(() => {
+        form.fetch = mockFetch;
+      });
+
+      it("sends the data", async () => {
+        expect.assertions(1);
+
+        await form.handleSubmit();
+        wrapper.update();
+
+        expect(mockFetch).toHaveBeenCalledWith("/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: "form-name=valid&requiredField=text&optionalField=more%20text"
         });
       });
 
-      // Add the required input
-      await form.handleFieldChange(
-        { target: { name: "requiredField", value: "input" } },
-        createMockValidator()
-      );
+      it("clears the inputs", async () => {
+        expect.assertions(1);
 
-      // Submit the form
-      await form.handleSubmit();
-      wrapper.update();
-    });
+        await form.handleSubmit();
+        wrapper.update();
 
-    afterAll(() => {
-      // Clean up
-      wrapper.unmount();
-    });
-
-    it("should send the data", () => {
-      expect(fetch).toHaveBeenCalledWith("/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "form-name=tip&requiredField=input&optionalField="
+        expect(
+          wrapper.find("input").everyWhere(i => i.prop("value").length === 0)
+        ).toBe(true);
       });
+
+      //  TODO: Implement alerts
+      // it("shows a success alert", async () => {
+      //   expect.assertions(1);
+
+      //   await form.handleSubmit();
+      //   wrapper.update();
+
+      //   expect(wrapper.find(".alert--success").exists()).toBe(true);
+      // });
     });
 
-    it("should clear the inputs", () => {
-      const allInputsClear = wrapper
-        .find("input")
-        .everyWhere(i => i.prop("value") === "");
-      expect(allInputsClear).toBe(true);
-    });
-  });
+    describe("on error", () => {
+      beforeEach(() => {
+        form.fetch = mockFetchErr;
+      });
 
-  describe("given missing data", () => {
-    // Create the form
-    const wrapper = mount(<Form fields={{ requiredField, optionalField }} />);
-    const form = wrapper.instance();
+      it("does not clear the inputs", async () => {
+        expect.assertions(1);
 
-    beforeAll(async () => {
-      // Mock fetch()
-      fetch = jest.fn();
+        await form.handleSubmit();
+        wrapper.update();
 
-      // Add optional input
-      await form.handleFieldChange(
-        { target: { name: "optionalField", value: "optional" } },
-        createMockValidator()
-      );
+        assertInputsNotCleared(wrapper);
+      });
 
-      // Submit the form without required data
-      await form.handleSubmit();
-      wrapper.update();
-    });
+      // TODO: Implement alerts
+      // it("shows an error alert", async () => {
+      //   expect.assertions(1);
 
-    afterAll(() => {
-      // Clean up
-      wrapper.unmount();
-    });
+      //   await form.handleSubmit();
+      //   wrapper.update();
 
-    it("should not send the data", () => {
-      expect(fetch).not.toHaveBeenCalled();
-    });
-
-    it("should not clear the inputs", () => {
-      assertInputsNotCleared(wrapper);
-    });
-
-    it("should disable the submit button", () => {
-      assertSubmitDisabled(wrapper);
-    });
-  });
-
-  describe("given data with errors", () => {
-    // Create the form
-    const wrapper = mount(<Form fields={{ invalidField }} />);
-    const form = wrapper.instance();
-
-    beforeAll(async () => {
-      // Mock fetch()
-      fetch = jest.fn();
-
-      // Add the invalid input
-      await form.handleFieldChange(
-        { target: { name: "invalidField", value: "invalid" } },
-        invalidField.validator
-      );
-
-      // Submit the form with invalid data
-      await form.handleSubmit();
-      wrapper.update();
-    });
-
-    afterAll(() => {
-      // Clean up
-      wrapper.unmount();
-    });
-
-    it("should not send the data", () => {
-      expect(fetch).not.toHaveBeenCalled();
-    });
-
-    it("should not clear the inputs", () => {
-      assertInputsNotCleared(wrapper);
-    });
-
-    it("should disable the submit button", () => {
-      assertSubmitDisabled(wrapper);
-    });
-  });
-
-  describe("given the response is not OK", () => {
-    // Create the form
-    const wrapper = mount(<Form fields={{ optionalField }} />);
-    const form = wrapper.instance();
-
-    beforeAll(async () => {
-      // Mock fetch
-      fetch = jest.fn().mockImplementation(
-        () =>
-          new Promise((resolve, reject) => {
-            resolve({ ok: false });
-          })
-      );
-      // Add some input
-      await form.handleFieldChange(
-        { target: { name: "optionalField", value: "optional" } },
-        createMockValidator()
-      );
-      // Submit the form
-      await form.handleSubmit();
-      wrapper.update();
-    });
-
-    afterAll(() => {
-      // Clean up
-      wrapper.unmount();
-    });
-
-    it("should not clear the inputs", () => {
-      assertInputsNotCleared(wrapper);
+      //   expect(wrapper.find(".alert--error").exists()).toBe(true);
+      // });
     });
   });
 });

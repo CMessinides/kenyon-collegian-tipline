@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './reset.css';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./reset.css";
+import "./index.css";
+import App from "./App";
 import { blacklist, isEmail, isMobilePhone } from "validator";
 import Validator, { createValidatorFn } from "./Validator";
-import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from "./registerServiceWorker";
 
 const isNotEmpty = input => input.trim().length > 0;
 
@@ -25,7 +25,10 @@ const fields = {
     type: "tel",
     validator: new Validator([
       createValidatorFn(
-        input => isNotEmpty(input) ? isMobilePhone(blacklist(input, "\\s\\(\\)\\-"), "en-US"): true,
+        input =>
+          isNotEmpty(input)
+            ? isMobilePhone(blacklist(input, "\\s\\(\\)\\-"), "en-US")
+            : true,
         "Please enter a valid phone number."
       )
     ]),
@@ -42,13 +45,21 @@ const fields = {
   },
   "potential-interviews": {
     label: "Potential Interviews",
-    helpText: "Please list the names of anyone you think we should interview for this story."
+    helpText:
+      "Please list the names of anyone you think we should interview for this story."
   },
   "additional-sources": {
     label: "Additional Sources",
-    helpText: "Please describe any other sources that might help us gather information on this story."
+    helpText:
+      "Please describe any other sources that might help us gather information on this story."
   }
-}
+};
 
-ReactDOM.render(<App fields={fields} />, document.getElementById('root'));
+const embedded = window.parent !== window.top;
+if (embedded) document.querySelector("html").classList.add("is-embedded");
+
+ReactDOM.render(
+  <App formName="tip" fields={fields} fetchFn={fetch} embedded={embedded} />,
+  document.getElementById("root")
+);
 registerServiceWorker();

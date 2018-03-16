@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Field from "./Field";
 import SubmitButton from "./SubmitButton";
 import "./Form.css";
+import TransportService from "./TransportService";
+import Validator from "./Validator";
 
 const encodeForm = fields =>
   Object.keys(fields)
@@ -21,21 +24,47 @@ const getInitialFieldsState = fields =>
   );
 
 class Form extends Component {
+  static propTypes = {
+    fields: PropTypes.objectOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        helpText: PropTypes.string,
+        required: PropTypes.bool,
+        type: PropTypes.string,
+        validator: PropTypes.shape({
+          validate: PropTypes.func
+        }),
+        mask: PropTypes.string
+      })
+    ),
+    action: PropTypes.string,
+    name: PropTypes.string,
+    transportService: PropTypes.shape({
+      fetch: PropTypes.func
+    })
+  };
+
   static defaultProps = {
     fields: {},
     action: "/",
-    name: ""
+    name: "",
+    transportService: new TransportService(fetch)
   };
 
-  constructor(props, ...args) {
-    super(props, ...args);
+  constructor(args) {
+    super(args);
+
+    // Proxy this.fetch() to the transport service
+    this.fetch = this.props.transportService.fetch.bind(
+      this.props.transportService
+    );
 
     this.state = {
-      fields: getInitialFieldsState(props.fields)
+      fields: getInitialFieldsState(this.props.fields)
     };
   }
 
-  handleFieldChange = (event, validator) =>
+  handleFieldChange = (event, validator = new Validator()) =>
     new Promise((resolve, reject) => {
       const value = event.target.value;
       const error = validator.validate(value);
@@ -100,18 +129,17 @@ class Form extends Component {
         })
       };
 
-      fetch(this.props.action, config).then(resp => {
-        if (!resp.ok) {
-          resolve();
-          return;
-        }
-        this.setState(
-          {
-            fields: getInitialFieldsState(this.props.fields)
-          },
-          resolve
-        );
-      });
+      this.fetch(this.props.action, config).then(
+        response => {
+          this.setState(
+            {
+              fields: getInitialFieldsState(this.props.fields)
+            },
+            resolve
+          );
+        },
+        err => resolve()
+      );
     });
 
   render() {
