@@ -65,19 +65,19 @@
 }
 
 .submit-btn__text{
-  transition: 240ms transform cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  transition: 240ms transform cubic-bezier(0.55, 0.055, 0.675, 0.19) 60ms;
 }
 
 .submit-btn__loader {
-  transition: 240ms transform cubic-bezier(0.215, 0.610, 0.355, 1);
+  transition: 240ms transform cubic-bezier(0.215, 0.610, 0.355, 1) 60ms;
 }
 
 .submit-btn__text--hidden {
-  transition: 240ms transform cubic-bezier(0.215, 0.610, 0.355, 1);
+  transition: 240ms transform cubic-bezier(0.215, 0.610, 0.355, 1) 60ms;
   transform: translateY(-2rem);
 }
 
 .submit-btn__loader--hidden {
-  transition: 240ms transform cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  transition: 240ms transform cubic-bezier(0.55, 0.055, 0.675, 0.19) 60ms;
   transform: translateY(2rem);
 }
