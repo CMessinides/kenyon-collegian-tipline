@@ -64,9 +64,7 @@ class Form extends Component {
         show: false,
         animate: false
       },
-      submitStatus: {
-        submitting: false
-      }
+      submitting: false
     };
   }
 
@@ -114,12 +112,9 @@ class Form extends Component {
   setStatusSending = () =>
     new Promise(resolve => {
       this.setState(
-        prevState => ({
-          submitStatus: {
-            ...prevState.submitStatus,
-            submitting: true
-          }
-        }),
+        {
+          submitting: true
+        },
         resolve
       );
     });
@@ -131,14 +126,12 @@ class Form extends Component {
           alert: {
             ...prevState.alert,
             show: true,
-            animate: prevState.alert.show
+            animate: prevState.alert.show,
+            type: "success",
+            message: "Your tip has been submitted. Thank you!"
           },
           fields: getInitialFieldsState(this.props.fields),
-          submitStatus: {
-            ok: true,
-            submitting: false,
-            message: "Your tip has been submitted. Thank you!"
-          }
+          submitting: false
         }),
         resolve
       );
@@ -151,13 +144,11 @@ class Form extends Component {
           alert: {
             ...prevState.alert,
             show: true,
-            animate: prevState.alert.show
-          },
-          submitStatus: {
-            ok: false,
-            submitting: false,
+            type: "error",
+            animate: prevState.alert.show,
             message: `There was an error submitting your tip: ${error.message}`
-          }
+          },
+          submitting: false
         }),
         resolve
       );
@@ -244,7 +235,6 @@ class Form extends Component {
     });
 
   render() {
-    const submitStatus = this.state.submitStatus;
     return (
       <form
         className="form"
@@ -255,8 +245,8 @@ class Form extends Component {
         <Alert
           show={this.state.alert.show}
           animate={this.state.alert.animate}
-          ok={submitStatus.ok}
-          message={submitStatus.message}
+          type={this.state.alert.type}
+          message={this.state.alert.message}
           onDismiss={this.dismissAlert}
           onAnimationEnd={this.resetAlert}
         />
@@ -274,7 +264,7 @@ class Form extends Component {
         <div className="form__footer">
           <SubmitButton
             disabled={!this.canSubmit()}
-            submitting={submitStatus.submitting}
+            submitting={this.state.submitting}
           />
         </div>
       </form>

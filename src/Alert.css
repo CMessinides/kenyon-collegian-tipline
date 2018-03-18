@@ -35,15 +35,13 @@
   background-color: #ffffff;
 }
 
-.alert--exiting,
-.alert--exited {
+.alert--hide {
   transition: 280ms transform cubic-bezier(0.55, 0.055, 0.675, 0.19);
   pointer-events: none;
   transform: translateY(-100%) translateY(-24px);
 }
 
-.alert--entering,
-.alert--entered {
+.alert--show {
   transition: 280ms transform cubic-bezier(0.215, 0.610, 0.355, 1);
 }
 
