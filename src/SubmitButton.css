@@ -65,20 +65,20 @@
   animation: load 500ms cubic-bezier(0.455, 0.03, 0.515, 0.955) 0ms infinite alternate both;
 }
 
-.submit-btn__text{
-  transition: 240ms transform cubic-bezier(0.55, 0.055, 0.675, 0.19) 60ms;
+.submit-btn__text,
+.submit-btn__loader {
+  transition: 240ms transform cubic-bezier(0.39, 0.575, 0.565, 1) 60ms;
 }
 
-.submit-btn__loader {
-  transition: 240ms transform cubic-bezier(0.215, 0.610, 0.355, 1) 60ms;
+.submit-btn__text--hidden,
+.submit-btn__loader--hidden {
+  transition: 240ms transform cubic-bezier(0.47, 0, 0.745, 0.715) 60ms;
 }
 
 .submit-btn__text--hidden {
-  transition: 240ms transform cubic-bezier(0.215, 0.610, 0.355, 1) 60ms;
   transform: translateY(-2rem);
 }
 
 .submit-btn__loader--hidden {
-  transition: 240ms transform cubic-bezier(0.55, 0.055, 0.675, 0.19) 60ms;
   transform: translateY(2rem);
 }
