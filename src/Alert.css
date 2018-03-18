@@ -66,11 +66,13 @@
 }
 
 .alert--success .alert__badge {
-  background-color: #66BA27;
+  background-color: #9be4a5;
+  color: #138321;
 }
 
 .alert--error .alert__badge {
-  background-color: #D62828;
+  background-color: #f7cfcf;
+  color: #D62828;
 }
 
 .alert__icon {
@@ -79,8 +81,26 @@
 
 .alert__body {
   flex: 1 auto;
-  padding: 8px 12px;
+  padding: 12px;
   font-size: 0.875rem;
+}
+
+.alert__heading {
+  display: block;
+  line-height: 1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.alert--success .alert__heading {
+  color: #138321;
+}
+
+.alert--error .alert__heading {
+  color: #d62828;
 }
 
 .alert__dismiss {

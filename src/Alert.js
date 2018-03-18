@@ -37,7 +37,10 @@ const Alert = ({
   return (
     <div className={className} onAnimationEnd={onAnimationEnd}>
       <div className="alert__badge">{alertIcon(type, iconProps)}</div>
-      <div className="alert__body">{message}</div>
+      <div className="alert__body">
+        <strong className="alert__heading">{type}</strong>
+        <p>{message}</p>
+      </div>
       {onDismiss && (
         <button
           className="alert__dismiss"
