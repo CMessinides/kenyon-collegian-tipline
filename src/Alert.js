@@ -5,20 +5,29 @@ import { Transition } from "react-transition-group";
 import "./Alert.css";
 import { AlertIcon, CheckIcon, CloseIcon } from "./Icon";
 
-const Alert = ({ message, show, ok, onDismiss, timeout = 300 }) => {
+const Alert = ({
+  message,
+  show,
+  animate,
+  ok,
+  onDismiss,
+  onAnimationEnd,
+  timeout = 300
+}) => {
   return (
     <Transition in={show} timeout={timeout}>
       {status => {
         const className = classnames("alert", `alert--${status}`, {
           "alert--success": ok === true,
-          "alert--error": ok === false
+          "alert--error": ok === false,
+          "alert--animated": animate === true
         });
         const iconProps = {
           size: 20,
           className: "alert__icon"
         };
         return (
-          <div className={className}>
+          <div className={className} onAnimationEnd={onAnimationEnd}>
             <div className="alert__badge">
               {ok ? <CheckIcon {...iconProps} /> : <AlertIcon {...iconProps} />}
             </div>

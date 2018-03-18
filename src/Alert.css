@@ -1,3 +1,23 @@
+@keyframes nod {
+  33.33% {
+    transform: translateY(-6px);
+  }
+
+  66.67% {
+    transform: translateY(2px);
+  }
+}
+
+@keyframes shake {
+  33.33% {
+    transform: translateX(4px);
+  }
+
+  66.67% {
+    transform: translateX(-4px);
+  }
+}
+
 .alert {
   position: fixed;
   top: 12px;
@@ -25,6 +45,14 @@
 .alert--entering,
 .alert--entered {
   transition: 280ms transform cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+
+.alert--success.alert--animated {
+  animation: nod 240ms cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+.alert--error.alert--animated {
+  animation: shake 240ms cubic-bezier(0.39, 0.575, 0.565, 1);
 }
 
 .alert__badge,

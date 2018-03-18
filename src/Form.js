@@ -60,7 +60,10 @@ class Form extends Component {
 
     this.state = {
       fields: getInitialFieldsState(this.props.fields),
-      showAlert: false,
+      alert: {
+        show: false,
+        animate: false
+      },
       submitStatus: {
         submitting: false
       }
@@ -112,7 +115,6 @@ class Form extends Component {
     new Promise(resolve => {
       this.setState(
         prevState => ({
-          showAlert: false,
           submitStatus: {
             ...prevState.submitStatus,
             submitting: true
@@ -125,15 +127,19 @@ class Form extends Component {
   setStatusSuccess = () =>
     new Promise(resolve => {
       this.setState(
-        {
+        prevState => ({
+          alert: {
+            ...prevState.alert,
+            show: true,
+            animate: prevState.alert.show
+          },
           fields: getInitialFieldsState(this.props.fields),
-          showAlert: true,
           submitStatus: {
             ok: true,
             submitting: false,
             message: "Your tip has been submitted. Thank you!"
           }
-        },
+        }),
         resolve
       );
     });
@@ -141,22 +147,47 @@ class Form extends Component {
   setStatusError = error =>
     new Promise(resolve => {
       this.setState(
-        {
-          showAlert: true,
+        prevState => ({
+          alert: {
+            ...prevState.alert,
+            show: true,
+            animate: prevState.alert.show
+          },
           submitStatus: {
             ok: false,
             submitting: false,
             message: `There was an error submitting your tip: ${error.message}`
           }
-        },
+        }),
+        resolve
+      );
+    });
+
+  resetAlert = event =>
+    new Promise(resolve => {
+      this.setState(
+        prevState => ({
+          alert: {
+            ...prevState.alert,
+            animate: false
+          }
+        }),
         resolve
       );
     });
 
   dismissAlert = event =>
     new Promise(resolve => {
-      clearTimeout(this.state.alertTimeout);
-      this.setState({ showAlert: false }, resolve);
+      clearTimeout(this.state.alert.timeout);
+      this.setState(
+        prevState => ({
+          alert: {
+            ...prevState.alert,
+            show: false
+          }
+        }),
+        resolve
+      );
     });
 
   handleSubmit = event =>
@@ -191,13 +222,24 @@ class Form extends Component {
           }
         )
         .then(() => {
-          clearTimeout(this.state.alertTimeout);
-          const alertTimeout = setTimeout(() => {
-            this.setState({
-              showAlert: false
-            });
+          clearTimeout(this.state.alert.timeout);
+          const timeout = setTimeout(() => {
+            this.setState(prevState => ({
+              alert: {
+                ...prevState.alert,
+                show: false
+              }
+            }));
           }, 3500);
-          this.setState({ alertTimeout }, resolve);
+          this.setState(
+            prevState => ({
+              alert: {
+                ...prevState.alert,
+                timeout
+              }
+            }),
+            resolve
+          );
         });
     });
 
@@ -211,10 +253,12 @@ class Form extends Component {
         onSubmit={this.handleSubmit}
       >
         <Alert
-          show={this.state.showAlert}
+          show={this.state.alert.show}
+          animate={this.state.alert.animate}
           ok={submitStatus.ok}
           message={submitStatus.message}
           onDismiss={this.dismissAlert}
+          onAnimationEnd={this.resetAlert}
         />
         {Object.keys(this.props.fields).map(name => (
           <Field
