@@ -225,15 +225,14 @@ describe("with valid fields", () => {
         ).toBe(true);
       });
 
-      //  TODO: Implement alerts
-      // it("shows a success alert", async () => {
-      //   expect.assertions(1);
+      it("shows a success alert", async () => {
+        expect.assertions(1);
 
-      //   await form.handleSubmit();
-      //   wrapper.update();
+        await form.handleSubmit();
+        wrapper.update();
 
-      //   expect(wrapper.find(".alert--success").exists()).toBe(true);
-      // });
+        expect(wrapper.find(".alert--success").exists()).toBe(true);
+      });
     });
 
     describe("on error", () => {
@@ -250,15 +249,14 @@ describe("with valid fields", () => {
         assertInputsNotCleared(wrapper);
       });
 
-      // TODO: Implement alerts
-      // it("shows an error alert", async () => {
-      //   expect.assertions(1);
+      it("shows an error alert", async () => {
+        expect.assertions(1);
 
-      //   await form.handleSubmit();
-      //   wrapper.update();
+        await form.handleSubmit();
+        wrapper.update();
 
-      //   expect(wrapper.find(".alert--error").exists()).toBe(true);
-      // });
+        expect(wrapper.find(".alert--error").exists()).toBe(true);
+      });
     });
   });
 });

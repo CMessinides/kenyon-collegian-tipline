@@ -10,9 +10,13 @@ class TransportService {
           response =>
             response.ok
               ? resolve(response)
-              : reject(Error("HTTP response not OK"))
+              : reject(
+                  Error(
+                    `Got response ${response.status}, ${response.statusText}`
+                  )
+                )
         )
-        .catch(error => reject(error));
+        .catch(error => reject(Error("Encountered network connection error")));
     });
 }
 

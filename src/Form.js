@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Field from "./Field";
 import SubmitButton from "./SubmitButton";
 import TransportService from "./TransportService";
+import Alert from "./Alert";
 
 import "./Form.css";
 
@@ -51,14 +52,18 @@ class Form extends Component {
     transportService: new TransportService()
   };
 
-  constructor(args) {
-    super(args);
+  constructor(...args) {
+    super(...args);
 
     // Proxy this.fetch() to the transport service
     this.fetch = this.props.transportService.fetch;
 
     this.state = {
-      fields: getInitialFieldsState(this.props.fields)
+      fields: getInitialFieldsState(this.props.fields),
+      showAlert: false,
+      submitStatus: {
+        submitting: false
+      }
     };
   }
 
@@ -103,6 +108,57 @@ class Form extends Component {
     return true;
   };
 
+  setStatusSending = () =>
+    new Promise(resolve => {
+      this.setState(
+        prevState => ({
+          showAlert: false,
+          submitStatus: {
+            ...prevState.submitStatus,
+            submitting: true
+          }
+        }),
+        resolve
+      );
+    });
+
+  setStatusSuccess = () =>
+    new Promise(resolve => {
+      this.setState(
+        {
+          fields: getInitialFieldsState(this.props.fields),
+          showAlert: true,
+          submitStatus: {
+            ok: true,
+            submitting: false,
+            message: "Your tip has been submitted. Thank you!"
+          }
+        },
+        resolve
+      );
+    });
+
+  setStatusError = error =>
+    new Promise(resolve => {
+      this.setState(
+        {
+          showAlert: true,
+          submitStatus: {
+            ok: false,
+            submitting: false,
+            message: `There was an error submitting your tip: ${error.message}`
+          }
+        },
+        resolve
+      );
+    });
+
+  dismissAlert = event =>
+    new Promise(resolve => {
+      clearTimeout(this.state.alertTimeout);
+      this.setState({ showAlert: false }, resolve);
+    });
+
   handleSubmit = event =>
     new Promise((resolve, reject) => {
       if (event) event.preventDefault();
@@ -122,20 +178,31 @@ class Form extends Component {
         })
       };
 
-      this.fetch(this.props.action, config).then(
-        response => {
-          this.setState(
-            {
-              fields: getInitialFieldsState(this.props.fields)
-            },
-            resolve
-          );
-        },
-        err => resolve()
-      );
+      this.setStatusSending()
+        .then(() => {
+          return this.fetch(this.props.action, config);
+        })
+        .then(
+          response => {
+            return this.setStatusSuccess();
+          },
+          error => {
+            return this.setStatusError(error);
+          }
+        )
+        .then(() => {
+          clearTimeout(this.state.alertTimeout);
+          const alertTimeout = setTimeout(() => {
+            this.setState({
+              showAlert: false
+            });
+          }, 3500);
+          this.setState({ alertTimeout }, resolve);
+        });
     });
 
   render() {
+    const submitStatus = this.state.submitStatus;
     return (
       <form
         className="form"
@@ -143,6 +210,12 @@ class Form extends Component {
         data-netlify-honeypot="bot-field"
         onSubmit={this.handleSubmit}
       >
+        <Alert
+          show={this.state.showAlert}
+          ok={submitStatus.ok}
+          message={submitStatus.message}
+          onDismiss={this.dismissAlert}
+        />
         {Object.keys(this.props.fields).map(name => (
           <Field
             {...this.props.fields[name]}

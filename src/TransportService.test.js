@@ -16,7 +16,7 @@ describe("fetch()", () => {
       )
     );
 
-    return expect(ts.fetch("/")).rejects.toEqual(Error());
+    return expect(ts.fetch("/")).rejects.toBeInstanceOf(Error);
   });
 
   it("should reject if response is not OK", () => {
@@ -32,7 +32,7 @@ describe("fetch()", () => {
       )
     );
 
-    return expect(ts.fetch("/")).rejects.toEqual(Error("HTTP response not OK"));
+    return expect(ts.fetch("/")).rejects.toBeInstanceOf(Error);
   });
 
   it("should resolve if the response is OK", () => {
