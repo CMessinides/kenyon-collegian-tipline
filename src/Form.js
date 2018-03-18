@@ -262,10 +262,12 @@ class Form extends Component {
           />
         ))}
         <div className="form__footer">
-          <SubmitButton
-            disabled={!this.canSubmit()}
-            submitting={this.state.submitting}
-          />
+          <div className="form__footer-container">
+            <SubmitButton
+              disabled={!this.canSubmit()}
+              submitting={this.state.submitting}
+            />
+          </div>
         </div>
       </form>
     );

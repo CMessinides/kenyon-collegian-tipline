@@ -118,3 +118,7 @@
 .alert__dismiss:hover {
   background-color: #f0f1f5;
 }
+
+.is-embedded .alert {
+  top: 69px;
+}
