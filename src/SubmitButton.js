@@ -12,8 +12,10 @@ const SubmitButton = ({ disabled, submitting = false }) => {
   });
   return (
     <button className="submit-btn" type="submit" disabled={disabled}>
-      <span className={txtClassnames}>Submit</span>
-      <span className={loaderClassnames} aria-label="Submitting" />
+      <div className="submit-btn__container">
+        <span className={txtClassnames}>Submit</span>
+        <span className={loaderClassnames} aria-label="Submitting" />
+      </div>
     </button>
   );
 };
