@@ -1,6 +1,6 @@
 # The Kenyon Collegian Tipline
 
-This is the source code for the [*Kenyon Collegian*](https://kenyoncollegian.com/)'s tipline at [tips.kenyoncollegian.com/](https://tips.kenyoncollegian.com/). It's a simple React app that allows *Collegian* readers to submit tips through [Netlify](https://netlify.com/)'s form submission service. The app features form validation and unique styles in embedded (iframe) contexts.
+This is the source code for the [*Kenyon Collegian*](https://kenyoncollegian.com)'s tipline at [tips.kenyoncollegian.com](https://tips.kenyoncollegian.com). It's a simple React app that allows *Collegian* readers to submit tips through [Netlify](https://netlify.com)'s form submission service. The app features form validation and unique styles in embedded (iframe) contexts.
 
 ## Development
 
